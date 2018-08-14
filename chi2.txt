@@ -1,0 +1,14 @@
+Mean: 3.092 ,Sigma: 0.03 ,Alpha: 1.9 ,Power: 0.6 ,chi^2 = 99.5009
+Mean: 3.092 ,Sigma: 0.03 ,Alpha: 2 ,Power: 0.5 ,chi^2 = 97.8773
+Mean: 3.092 ,Sigma: 0.03 ,Alpha: 2.1 ,Power: 0.4 ,chi^2 = 97.8339
+Mean: 3.092 ,Sigma: 0.03 ,Alpha: 2.2 ,Power: 0.3 ,chi^2 = 98.9971
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 1.8 ,Power: 0.8 ,chi^2 = 99.9029
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 1.9 ,Power: 0.6 ,chi^2 = 97.7312
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 1.9 ,Power: 0.7 ,chi^2 = 98.6439
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 2 ,Power: 0.5 ,chi^2 = 96.5315
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 2 ,Power: 0.6 ,chi^2 = 99.1191
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 2.1 ,Power: 0.4 ,chi^2 = 96.7902
+Mean: 3.093 ,Sigma: 0.03 ,Alpha: 2.2 ,Power: 0.3 ,chi^2 = 98.1559
+Mean: 3.094 ,Sigma: 0.03 ,Alpha: 1.9 ,Power: 0.6 ,chi^2 = 99.2205
+Mean: 3.094 ,Sigma: 0.03 ,Alpha: 2 ,Power: 0.5 ,chi^2 = 98.4741
+Mean: 3.094 ,Sigma: 0.03 ,Alpha: 2.1 ,Power: 0.4 ,chi^2 = 99.042
