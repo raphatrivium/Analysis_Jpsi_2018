@@ -1,0 +1,7 @@
+
+$ root -l
+
+$ .include /cvmfs/cms.cern.ch/slc6_amd64_gcc472/lcg/roofit/5.32.03-cms/include
+
+//no caso, esse eh um exemplo que quero executar
+$ .x /cvmfs/cms.cern.ch/slc6_amd64_gcc472/lcg/root/5.32.00-cms//tutorials/roofit/rf101_basics.C
