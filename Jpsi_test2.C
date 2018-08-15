@@ -51,8 +51,8 @@ RooCBShape cball1("cball1","cball1",mass,mean1,sigma1,alpha,npow);
 // A d d  s i g n a l   a n d   b a c k g r o u n d
 // ------------------------------------------------
 // Sum the composite signal and background 
-RooRealVar bkgfrac2("bkgfrac2","fraction of background",0.92,0.1,1.3) ;
-RooAddPdf  model2("model2","CBall1 + Expo",RooArgList(cball1,expo),bkgfrac2);
+RooRealVar bkg_frac("bkg_frac","fraction of background",0.92,0.1,1.3) ;
+RooAddPdf  sig_bkg("sig_bkg","CBall1 + Expo",RooArgList(cball1,expo),bkg_frac);
 
 //Creating a frame
 RooPlot* frame = mass.frame(Title("Signal + Background"));
@@ -61,17 +61,21 @@ RooPlot* frame = mass.frame(Title("Signal + Background"));
 rooNoCutMass.plotOn(frame,Name("theData"));
 
 //Plot of Crystal Ball fit
-model2.plotOn(frame,Name("ThePdf"));
+sig_bkg.plotOn(frame,Name("ThePdf"));
 
-RooArgSet * pars = model2.getParameters(rooNoCutMass);
+RooArgSet * pars = sig_bkg.getParameters(rooNoCutMass);
 int nfloatpars = pars->selectByAttrib("Constant",kFALSE)->getSize(); 
 double mychsq = frame->chiSquare("thePdf","theData", nfloatpars); 
 double myndof = massJpsiHist->GetNbinsX() - nfloatpars;
 
-model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
+cout << "mychsq: " << mychsq << endl;
+cout << "myndof: " << myndof << endl;
+//cout << 
+
+sig_bkg.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
                     );
 cball1.plotOn(frame,("Signal"), LineStyle(kDashed),LineColor(kGreen));
-model2.plotOn(frame,Components("expo*"),LineStyle(kDashed),LineColor(kRed));
+sig_bkg.plotOn(frame,Components("expo*"),LineStyle(kDashed),LineColor(kRed));
 
 
 //modifying frame bin
