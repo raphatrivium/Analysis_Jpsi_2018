@@ -1,6 +1,6 @@
 using namespace RooFit ;
 
-double Jpsi_test()
+double Jpsi_test2()
 {
 
 
@@ -14,8 +14,9 @@ RooRealVar mass("mass","mass",2.7,3.5);
 RooDataHist rooNoCutMass("rooNoCutMass","rooNoCutMass",mass,Import(*massJpsiHist));
 
 ofstream textfile;
-textfile.open("chi2.txt");
+textfile.open("chi2_2.txt");
 
+/*
 for(double k = 3.090 ; k < 3.100 ; k = k + 0.001 ) //loop mean1
 {
   for(double l = 0.01 ; l < 0.09 ; l = l + 0.01 )  //loop sigma1
@@ -24,17 +25,22 @@ for(double k = 3.090 ; k < 3.100 ; k = k + 0.001 ) //loop mean1
     {
       for(double n = 0.1 ; n < 2.5 ; n = n + 0.1) //loop power
       {
-		for(double o = 3.090 ; o < 3.100 ; o = o + 0.001) //loop mean1
+	for(double o = 3.090 ; o < 3.100 ; o = o + 0.001) //loop mean1
 		{
      	   /*for(double p = 0.01 ; p < 0.09 ; p = p + 0.01 )  //loop sigma2
   		   {
       		 for(double q = 0.1 ; q < 1.3 ; q = q + 0.1 )  //loop sigma2
   		     {*/
 //Roofit Variables
-RooRealVar mean1("mean1","mean1",k,2.9,3.2);
-RooRealVar sigma1("sigma1","sigma1",l,0.01,0.09);
-RooRealVar alpha("alpha","tail shift",m,0.2,3.0);
-RooRealVar npow("npow","power order",n,0.1,2.5);
+RooRealVar mean1("mean1","mean1",3.093,2.9,3.2);
+RooRealVar sigma1("sigma1","sigma1",0.027,0.01,0.09);
+RooRealVar alpha("alpha","tail shift",2.15,0.2,3.0);
+RooRealVar npow("npow","power order",0.40,0.1,2.5);
+
+RooRealVar lambda("lambda", "slope", 2.6, 0.1, 4.);
+
+//ROOFIT EXPONENTIAL
+RooExponential expo("expo", "exponential PDF", mass, lambda);
 
 //with only Crystal Ball 
 //Mean: 3.093 ,Sigma: 0.03 ,Alpha: 2.1 ,Power: 0.4 ,chi^2 = 96.7902
@@ -42,11 +48,12 @@ RooRealVar npow("npow","power order",n,0.1,2.5);
 //Crystall Ball Fit (S I G N A L)
 RooCBShape cball1("cball1","cball1",mass,mean1,sigma1,alpha,npow);
 
+//
 
 //Gaussian Fit (B A C K G R O U N D)
-RooRealVar mean2("mean2","mean2",o,2.9,3.2);
-RooRealVar sigma2("sigma2","sigma2",p,0.01,1);
-RooGaussian gauss1("gauss1","gauss1",mass,mean2,sigma2);
+//RooRealVar mean2("mean2","mean2",o,2.9,3.2);
+//RooRealVar sigma2("sigma2","sigma2",p,0.01,1);
+//RooGaussian gauss1("gauss1","gauss1",mass,mean2,sigma2);
 
 
 //Gaussian Fit (B A C K G R O U N D)
@@ -65,22 +72,30 @@ RooGaussian gauss1("gauss1","gauss1",mass,mean2,sigma2);
 // A d d  s i g n a l   a n d   b a c k g r o u n d
 // ------------------------------------------------
 // Sum the composite signal and background 
-RooRealVar bkgfrac2("bkgfrac2","fraction of background",q,0.1,1.3) ;
-RooAddPdf  model2("model2","CBall1 + Gauss",RooArgList(cball1,gauss1),bkgfrac2);
-
-
+RooRealVar bkgfrac2("bkgfrac2","fraction of background",0.92,0.1,1.3) ;
+RooAddPdf  model2("model2","CBall1 + Expo",RooArgList(cball1,expo),bkgfrac2);
 
 //Creating a frame
-RooPlot* frame = mass.frame(Title("Crystal Ball"));
+RooPlot* frame = mass.frame(Title("Signal + Background"));
 
 //Plot of Mass without Cuts
 rooNoCutMass.plotOn(frame,Name("theData"));
 
 //Plot of Crystal Ball fit
-model2.plotOn(frame,Name("model2"));
+model2.plotOn(frame,Name("ThePdf"));
 
-model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2} = 96.7902")) );
+	RooArgSet * pars = model2.getParameters(rooNoCutMass);
+	int nfloatpars = pars->selectByAttrib("Constant",kFALSE)->getSize(); 
+	double mychsq = frame->chiSquare("thePdf","theData", nfloatpars); 
+	double myndof = massJpsiHist->GetNbinsX() - nfloatpars;
 
+ 	model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
+                    );
+
+//model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/(N-2) = 28,64/3 = 9,55")) );
+
+cball1.plotOn(frame,("Signal"), LineStyle(kDashed),LineColor(kGreen));
+model2.plotOn(frame,Components("expo*"),LineStyle(kDashed),LineColor(kRed));
 
 
 //modifying frame bin
@@ -91,9 +106,9 @@ double chi2 = frame->chiSquare();
 //-------------------------------------------------
 //C H I -  S Q U A R E
 //--------------------------------------------------
-//cout << "chi^2 = " << chi2 << endl;
+cout << "chi^2 = " << chi2 << endl;
 
-
+/*
 			if (chi2 < 100)
 			{
 			cout << "========================================"<< endl;
@@ -111,24 +126,14 @@ double chi2 = frame->chiSquare();
     }//end loop alpha1
   }//end loop sigma1
 }//end loop mean
-
-textfile.close();
-/*
-//L O O P    T E S T
-for( int i = 0; i < 3; i++) 
-{
-   // cout << "Result: " << i << endl;
-  for( int j = 0; j < 3; j++)
-  {
-    cout << "Result: " << i <<","<< j << endl;
-  }
-}
 */
-TCanvas* Jpsi_teste = new TCanvas("Jpsi_teste","Jpsi_teste",1200,600);
+textfile.close();
+
+TCanvas* Jpsi_teste_canvas = new TCanvas("Jpsi_teste_canvas","Jpsi_teste",1200,600);
 
 frame->Draw();
 
-Jpsi_teste->SaveAs("/eos/user/r/ragomesd/analysis_2018/Jpsi_teste.png");
+Jpsi_teste_canvas->SaveAs("/eos/user/r/ragomesd/analysis_2018/Jpsi_teste2.png");
 
 
 
