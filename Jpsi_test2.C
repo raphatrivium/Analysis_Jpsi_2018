@@ -68,9 +68,9 @@ int nfloatpars = pars->selectByAttrib("Constant",kFALSE)->getSize();
 double mychsq = frame->chiSquare("thePdf","theData", nfloatpars); 
 double myndof = massJpsiHist->GetNbinsX() - nfloatpars;
 
+cout << "nfloatpars: "<< nfloatpars << endl;
 cout << "mychsq: " << mychsq << endl;
 cout << "myndof: " << myndof << endl;
-//cout << 
 
 sig_bkg.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
                     );
@@ -82,10 +82,10 @@ sig_bkg.plotOn(frame,Components("expo*"),LineStyle(kDashed),LineColor(kRed));
 //rooNoCutMass.plotOn(frame,Binning(5)) ;
 //cball1.plotOn(frame,Binning(5)) ;
 
-double chi2 = frame->chiSquare();
 //-------------------------------------------------
 //C H I -  S Q U A R E
 //--------------------------------------------------
+double chi2 = frame->chiSquare();
 cout << "chi^2 = " << chi2 << endl;
 
 /*
