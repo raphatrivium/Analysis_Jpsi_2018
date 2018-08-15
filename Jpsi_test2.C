@@ -48,27 +48,6 @@ RooExponential expo("expo", "exponential PDF", mass, lambda);
 //Crystall Ball Fit (S I G N A L)
 RooCBShape cball1("cball1","cball1",mass,mean1,sigma1,alpha,npow);
 
-//
-
-//Gaussian Fit (B A C K G R O U N D)
-//RooRealVar mean2("mean2","mean2",o,2.9,3.2);
-//RooRealVar sigma2("sigma2","sigma2",p,0.01,1);
-//RooGaussian gauss1("gauss1","gauss1",mass,mean2,sigma2);
-
-
-//Gaussian Fit (B A C K G R O U N D)
-//RooRealVar mean3("mean3","mean3",3.097,2.9,3.2);
-//RooRealVar sigma3("sigma2","sigma2",0.04,0.02,1);
-//RooGaussian gauss2("gauss2","gauss2",mass,mean3,sigma3);
-
-
-// A d d  s i g n a l   a n d   s i g n a l
-// ------------------------------------------------
-// Sum the composite signal and signal 
-//RooRealVar bkgfrac1("bkgfrac1","background",0.9,0.,1.) ;
-//RooAddPdf  model1("model1","gauss1 + Gauss1",RooArgList(gauss1,gauss2),bkgfrac1);
-
-
 // A d d  s i g n a l   a n d   b a c k g r o u n d
 // ------------------------------------------------
 // Sum the composite signal and background 
@@ -84,16 +63,13 @@ rooNoCutMass.plotOn(frame,Name("theData"));
 //Plot of Crystal Ball fit
 model2.plotOn(frame,Name("ThePdf"));
 
-	RooArgSet * pars = model2.getParameters(rooNoCutMass);
-	int nfloatpars = pars->selectByAttrib("Constant",kFALSE)->getSize(); 
-	double mychsq = frame->chiSquare("thePdf","theData", nfloatpars); 
-	double myndof = massJpsiHist->GetNbinsX() - nfloatpars;
+RooArgSet * pars = model2.getParameters(rooNoCutMass);
+int nfloatpars = pars->selectByAttrib("Constant",kFALSE)->getSize(); 
+double mychsq = frame->chiSquare("thePdf","theData", nfloatpars); 
+double myndof = massJpsiHist->GetNbinsX() - nfloatpars;
 
- 	model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
+model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
                     );
-
-//model2.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/(N-2) = 28,64/3 = 9,55")) );
-
 cball1.plotOn(frame,("Signal"), LineStyle(kDashed),LineColor(kGreen));
 model2.plotOn(frame,Components("expo*"),LineStyle(kDashed),LineColor(kRed));
 
@@ -134,7 +110,6 @@ TCanvas* Jpsi_teste_canvas = new TCanvas("Jpsi_teste_canvas","Jpsi_teste",1200,6
 frame->Draw();
 
 Jpsi_teste_canvas->SaveAs("/eos/user/r/ragomesd/analysis_2018/Jpsi_teste2.png");
-
 
 
 }
