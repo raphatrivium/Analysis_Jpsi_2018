@@ -58,14 +58,14 @@ RooAddPdf  sig_bkg("sig_bkg","CBall1 + Expo",RooArgList(cball1,expo),bkg_frac);
 RooPlot* frame = mass.frame(Title("Signal + Background"));
 
 //Plot of Mass without Cuts
-rooNoCutMass.plotOn(frame,Name("theData"));
+rooNoCutMass.plotOn(frame);
 
 //Plot of Crystal Ball fit
-sig_bkg.plotOn(frame,Name("ThePdf"));
+sig_bkg.plotOn(frame);
 
 RooArgSet * pars = sig_bkg.getParameters(rooNoCutMass);
 int nfloatpars = pars->selectByAttrib("Constant",kFALSE)->getSize(); 
-double mychsq = frame->chiSquare("thePdf","theData", nfloatpars); 
+double mychsq = frame->chiSquare("sig_bkg","rooNoCutMass", nfloatpars); 
 double myndof = massJpsiHist->GetNbinsX() - nfloatpars;
 
 cout << "nfloatpars: "<< nfloatpars << endl;
@@ -74,7 +74,7 @@ cout << "myndof: " << myndof << endl;
 
 sig_bkg.paramOn(frame,Layout(0.65,0.99,0.99),Format("NE"),Label(Form("#chi^{2}/ndf = %2.0f/%2.0f", myndof*mychsq, myndof))
                     );
-cball1.plotOn(frame,("Signal"), LineStyle(kDashed),LineColor(kGreen));
+//cball1.plotOn(frame,("Signal"), LineStyle(kDashed),LineColor(kGreen));
 sig_bkg.plotOn(frame,Components("expo*"),LineStyle(kDashed),LineColor(kRed));
 
 
